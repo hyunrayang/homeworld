@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Picker Widget</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .widget-container {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .color-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .color-picker {
+            width: 100%;
+            height: 150px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: crosshair;
+            position: relative;
+        }
+        .color-palette {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        .color-palette div {
+            width: 20%;
+            height: 30px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .hex-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="widget-container">
+    <input type="text" class="color-input" placeholder="글자를 입력해주세요">
+    <div class="color-picker" id="colorPicker"></div>
+    <input type="text" class="hex-input" id="hexInput" placeholder="#FFFFFF">
+    <div class="color-palette">
+        <div style="background-color: #f28b82;" onclick="setColor('#f28b82')"></div>
+        <div style="background-color: #fbbc04;" onclick="setColor('#fbbc04')"></div>
+        <div style="background-color: #34a853;" onclick="setColor('#34a853')"></div>
+        <div style="background-color: #4285f4;" onclick="setColor('#4285f4')"></div>
+        <div style="background-color: #ea4335;" onclick="setColor('#ea4335')"></div>
+    </div>
+    <button class="submit-btn">글자색 선택</button>
+</div>
+
+<script>
+    const colorPicker = document.getElementById('colorPicker');
+    const hexInput = document.getElementById('hexInput');
+
+    colorPicker.addEventListener('click', (e) => {
+        const x = e.offsetX;
+        const y = e.offsetY;
+        const ctx = colorPicker.getContext('2d');
+        const pixel = ctx.getImageData(x, y, 1, 1).data;
+        const hex = rgbToHex(pixel[0], pixel[1], pixel[2]);
+        hexInput.value = hex;
+    });
+
+    function rgbToHex(r, g, b) {
+        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+    }
+
+    function setColor(hex) {
+        hexInput.value = hex;
+    }
+
+    window.onload = function() {
+        const ctx = colorPicker.getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, colorPicker.width, 0);
+        gradient.addColorStop(0, 'red');
+        gradient.addColorStop(1, 'white');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, colorPicker.width, colorPicker.height);
+
+        const gradientBlack = ctx.createLinearGradient(0, 0, 0, colorPicker.height);
+        gradientBlack.addColorStop(0, 'rgba(0,0,0,0)');
+        gradientBlack.addColorStop(1, 'black');
+        ctx.fillStyle = gradientBlack;
+        ctx.fillRect(0, 0, colorPicker.width, colorPicker.height);
+    };
+</script>
+
+</body>
+</html>
