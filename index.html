@@ -84,15 +84,6 @@
     const colorPicker = document.getElementById('colorPicker');
     const hexInput = document.getElementById('hexInput');
 
-    colorPicker.addEventListener('click', (e) => {
-        const x = e.offsetX;
-        const y = e.offsetY;
-        const ctx = colorPicker.getContext('2d');
-        const pixel = ctx.getImageData(x, y, 1, 1).data;
-        const hex = rgbToHex(pixel[0], pixel[1], pixel[2]);
-        hexInput.value = hex;
-    });
-
     function rgbToHex(r, g, b) {
         return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
     }
@@ -115,6 +106,15 @@
         ctx.fillStyle = gradientBlack;
         ctx.fillRect(0, 0, colorPicker.width, colorPicker.height);
     };
+
+    colorPicker.addEventListener('click', (e) => {
+        const x = e.offsetX;
+        const y = e.offsetY;
+        const ctx = colorPicker.getContext('2d');
+        const pixel = ctx.getImageData(x, y, 1, 1).data;
+        const hex = rgbToHex(pixel[0], pixel[1], pixel[2]);
+        hexInput.value = hex;
+    });
 </script>
 
 </body>
